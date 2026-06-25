@@ -1,0 +1,49 @@
+{
+    "name": "Message",
+    "type": "object",
+    "properties": {
+      "operation_id": {
+        "type": "string"
+      },
+      "sender_name": {
+        "type": "string"
+      },
+      "sender_role": {
+        "type": "string",
+        "enum": [
+          "admin",
+          "agent",
+          "driver",
+          "support",
+          "client"
+        ]
+      },
+      "content": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "message",
+          "status_update",
+          "alert",
+          "system"
+        ],
+        "default": "message"
+      },
+      "read": {
+        "type": "boolean",
+        "default": false
+      },
+      "attachments": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "operation_id",
+      "content"
+    ]
+  }

@@ -1,0 +1,27 @@
+{
+  "name": "SalesQuote",
+  "type": "object",
+  "description": "Devis commercial (ERP) — avant facturation / commande.",
+  "properties": {
+    "reference": { "type": "string" },
+    "client_company": { "type": "string" },
+    "commercial_owner": {
+      "type": "string",
+      "description": "Commercial ou exploitant responsable (agrégats CRM)"
+    },
+    "contact_name": { "type": "string" },
+    "contact_email": { "type": "string" },
+    "title": { "type": "string" },
+    "amount_ht": { "type": "number" },
+    "vat_rate": { "type": "number" },
+    "amount_ttc": { "type": "number" },
+    "currency": { "type": "string", "default": "EUR" },
+    "valid_until": { "type": "string", "format": "date-time" },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "sent", "accepted", "rejected", "expired", "invoiced"]
+    },
+    "notes": { "type": "string" }
+  },
+  "required": ["reference", "client_company", "title", "amount_ht", "vat_rate", "valid_until", "status"]
+}
