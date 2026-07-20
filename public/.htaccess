@@ -1,0 +1,27 @@
+# LogiTrans / IksaTech — SPA React (Vite + React Router)
+# À placer à la racine du dossier contenant index.html (ex. public_html ou sous-dossier).
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Même dossier que index.html (racine du site ou sous-dossier, ex. public_html/monapp/).
+  # Si les routes 404 en direct URL, activez RewriteBase avec le chemin URL du dossier :
+  # RewriteBase /monapp/
+
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . index.html [L]
+</IfModule>
+
+# Compression (souvent déjà gérée par cPanel ; sans conflit si doublon)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json
+</IfModule>
+
+# Cache des assets hashés (optionnel)
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+</IfModule>

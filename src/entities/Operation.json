@@ -1,0 +1,170 @@
+{
+    "name": "Operation",
+    "type": "object",
+    "properties": {
+      "reference": {
+        "type": "string",
+        "description": "Num\u00e9ro de r\u00e9f\u00e9rence unique du dossier"
+      },
+      "client_name": {
+        "type": "string",
+        "description": "Nom du client"
+      },
+      "type_operation": {
+        "type": "string",
+        "enum": [
+          "import",
+          "export",
+          "national",
+          "international",
+          "groupage",
+          "lot_complet"
+        ],
+        "description": "Type d'op\u00e9ration"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "draft",
+          "confirmed",
+          "assigned",
+          "in_transit",
+          "loading",
+          "unloading",
+          "delivered",
+          "completed",
+          "cancelled",
+          "incident"
+        ],
+        "default": "draft"
+      },
+      "priority": {
+        "type": "string",
+        "enum": [
+          "low",
+          "medium",
+          "high",
+          "urgent"
+        ],
+        "default": "medium"
+      },
+      "pickup_address": {
+        "type": "string"
+      },
+      "pickup_city": {
+        "type": "string"
+      },
+      "pickup_country": {
+        "type": "string"
+      },
+      "pickup_lat": {
+        "type": "number"
+      },
+      "pickup_lng": {
+        "type": "number"
+      },
+      "delivery_address": {
+        "type": "string"
+      },
+      "delivery_city": {
+        "type": "string"
+      },
+      "delivery_country": {
+        "type": "string"
+      },
+      "delivery_lat": {
+        "type": "number"
+      },
+      "delivery_lng": {
+        "type": "number"
+      },
+      "scheduled_pickup": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "scheduled_delivery": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "actual_pickup": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "actual_delivery": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "eta": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "driver_id": {
+        "type": "string"
+      },
+      "driver_name": {
+        "type": "string"
+      },
+      "driver2_id": {
+        "type": "string",
+        "description": "ID du 2\u00e8me chauffeur (optionnel)"
+      },
+      "driver2_name": {
+        "type": "string",
+        "description": "Nom du 2\u00e8me chauffeur (optionnel)"
+      },
+      "vehicle_id": {
+        "type": "string"
+      },
+      "vehicle_plate": {
+        "type": "string"
+      },
+      "cargo_description": {
+        "type": "string"
+      },
+      "cargo_weight": {
+        "type": "number"
+      },
+      "cargo_volume": {
+        "type": "number"
+      },
+      "cargo_pallets": {
+        "type": "number"
+      },
+      "special_instructions": {
+        "type": "string"
+      },
+      "temperature_controlled": {
+        "type": "boolean",
+        "default": false
+      },
+      "adr_goods": {
+        "type": "boolean",
+        "default": false
+      },
+      "current_lat": {
+        "type": "number"
+      },
+      "current_lng": {
+        "type": "number"
+      },
+      "delay_minutes": {
+        "type": "number",
+        "default": 0
+      },
+      "risk_score": {
+        "type": "number",
+        "description": "Score de risque IA (0-100)"
+      },
+      "ai_summary": {
+        "type": "string"
+      },
+      "assigned_agent": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reference",
+      "client_name",
+      "type_operation"
+    ]
+  }

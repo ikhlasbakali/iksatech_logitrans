@@ -1,0 +1,63 @@
+{
+    "name": "MaintenanceHistory",
+    "type": "object",
+    "properties": {
+      "vehicle_id": {
+        "type": "string"
+      },
+      "vehicle_plate": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "preventive",
+          "corrective",
+          "inspection",
+          "repair",
+          "oil_change",
+          "tire_change",
+          "brake_service",
+          "other"
+        ],
+        "default": "preventive"
+      },
+      "description": {
+        "type": "string"
+      },
+      "date": {
+        "type": "string",
+        "format": "date"
+      },
+      "mileage_at_service": {
+        "type": "number"
+      },
+      "cost": {
+        "type": "number"
+      },
+      "service_provider": {
+        "type": "string"
+      },
+      "next_service_km": {
+        "type": "number"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "scheduled",
+          "in_progress",
+          "completed",
+          "cancelled"
+        ],
+        "default": "scheduled"
+      },
+      "notes": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "vehicle_id",
+      "type",
+      "date"
+    ]
+  }

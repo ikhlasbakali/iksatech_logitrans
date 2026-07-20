@@ -1,0 +1,21 @@
+{
+  "name": "Client",
+  "type": "object",
+  "description": "Fichier client maître — import CSV/JSON pour création en masse.",
+  "properties": {
+    "company_name": { "type": "string", "description": "Raison sociale (obligatoire)" },
+    "external_code": { "type": "string", "description": "Code client interne / ERP" },
+    "legal_id": { "type": "string", "description": "SIRET, TVA intracommunautaire, etc." },
+    "sector": { "type": "string", "description": "Secteur d'activité" },
+    "contact_name": { "type": "string" },
+    "contact_email": { "type": "string" },
+    "contact_phone": { "type": "string" },
+    "address_line1": { "type": "string" },
+    "city": { "type": "string" },
+    "postal_code": { "type": "string" },
+    "country": { "type": "string" },
+    "payment_terms": { "type": "string", "description": "Conditions de paiement" },
+    "notes": { "type": "string" }
+  },
+  "required": ["company_name"]
+}

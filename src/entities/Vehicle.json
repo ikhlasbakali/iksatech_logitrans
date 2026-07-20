@@ -1,0 +1,117 @@
+{
+    "name": "Vehicle",
+    "type": "object",
+    "properties": {
+      "plate_number": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "van",
+          "truck_12t",
+          "truck_19t",
+          "truck_44t",
+          "semi_trailer",
+          "refrigerated",
+          "tanker"
+        ],
+        "default": "truck_19t"
+      },
+      "brand": {
+        "type": "string"
+      },
+      "model": {
+        "type": "string"
+      },
+      "year": {
+        "type": "number"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "available",
+          "in_use",
+          "maintenance",
+          "out_of_service"
+        ],
+        "default": "available"
+      },
+      "max_weight": {
+        "type": "number"
+      },
+      "max_volume": {
+        "type": "number"
+      },
+      "temperature_controlled": {
+        "type": "boolean",
+        "default": false
+      },
+      "adr_certified": {
+        "type": "boolean",
+        "default": false
+      },
+      "current_driver_id": {
+        "type": "string"
+      },
+      "current_lat": {
+        "type": "number"
+      },
+      "current_lng": {
+        "type": "number"
+      },
+      "last_maintenance": {
+        "type": "string",
+        "format": "date"
+      },
+      "next_maintenance": {
+        "type": "string",
+        "format": "date"
+      },
+      "mileage": {
+        "type": "number"
+      },
+      "maintenance_interval_km": {
+        "type": "number",
+        "default": 30000,
+        "description": "Kilom\u00e9trage entre deux maintenances"
+      },
+      "last_maintenance_km": {
+        "type": "number",
+        "description": "Kilom\u00e9trage lors de la derni\u00e8re maintenance"
+      },
+      "technical_inspection_date": {
+        "type": "string",
+        "format": "date",
+        "description": "Date du prochain contr\u00f4le technique"
+      },
+      "insurance_expiry": {
+        "type": "string",
+        "format": "date",
+        "description": "Date d'expiration de l'assurance"
+      },
+      "registration_expiry": {
+        "type": "string",
+        "format": "date",
+        "description": "Date d'expiration de la carte grise"
+      },
+      "fuel_consumption_avg": {
+        "type": "number",
+        "description": "Consommation moyenne L/100km"
+      },
+      "total_fuel_cost": {
+        "type": "number",
+        "default": 0,
+        "description": "Co\u00fbt total carburant cumul\u00e9"
+      },
+      "total_maintenance_cost": {
+        "type": "number",
+        "default": 0,
+        "description": "Co\u00fbt total maintenance cumul\u00e9"
+      }
+    },
+    "required": [
+      "plate_number",
+      "type"
+    ]
+  }

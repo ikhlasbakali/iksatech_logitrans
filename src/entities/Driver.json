@@ -1,0 +1,75 @@
+{
+    "name": "Driver",
+    "type": "object",
+    "properties": {
+      "first_name": {
+        "type": "string"
+      },
+      "last_name": {
+        "type": "string"
+      },
+      "phone": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string"
+      },
+      "license_number": {
+        "type": "string"
+      },
+      "license_expiry": {
+        "type": "string",
+        "format": "date"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "available",
+          "on_mission",
+          "off_duty",
+          "on_break",
+          "inactive"
+        ],
+        "default": "available"
+      },
+      "current_vehicle_id": {
+        "type": "string"
+      },
+      "current_lat": {
+        "type": "number"
+      },
+      "current_lng": {
+        "type": "number"
+      },
+      "photo_url": {
+        "type": "string"
+      },
+      "rating": {
+        "type": "number"
+      },
+      "total_deliveries": {
+        "type": "number",
+        "default": 0
+      },
+      "on_time_rate": {
+        "type": "number",
+        "default": 100
+      },
+      "certifications": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "work_visa_expiry": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Date d’expiration du visa / titre de travail (null si non renseigné)"
+      }
+    },
+    "required": [
+      "first_name",
+      "last_name",
+      "phone"
+    ]
+  }
