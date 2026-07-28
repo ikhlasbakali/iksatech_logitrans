@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('app_control_settings', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->json('role_module_grants')->nullable();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 

@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('vehicle_costs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('vehicle_id')->constrained('vehicles')->cascadeOnDelete();
+            $table->enum('type', ['fuel', 'maintenance', 'repair', 'insurance', 'tax', 'toll', 'fine', 'other']);
+            $table->decimal('amount', 10, 2);
+            $table->decimal('quantity', 10, 2)->nullable();
+            $table->decimal('unit_price', 10, 2)->nullable();
+            $table->integer('mileage_at_transaction')->nullable();
+            $table->string('supplier')->nullable();
+            $table->string('invoice_number')->nullable();
+            $table->date('cost_date');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

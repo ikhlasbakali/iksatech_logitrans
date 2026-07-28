@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('workflow_rules', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->boolean('enabled')->default(true);
+            $table->enum('trigger', ['operation.created', 'document.validated', 'delay.detected', 'vehicle.inactive']);
+            $table->string('name');
+            $table->json('actions');
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 

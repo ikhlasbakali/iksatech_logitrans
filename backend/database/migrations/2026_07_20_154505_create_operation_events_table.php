@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('operation_events', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('operation_id')->constrained('operations')->cascadeOnDelete();
+            $table->enum('type', ['created', 'assigned', 'status_change', 'location_update', 'document_added', 'message', 'incident', 'completed', 'customs_passage']);
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->foreignId('actor')->nullable()->constrained('users')->nullOnDelete();
+            $table->json('metadata')->nullable();
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 
