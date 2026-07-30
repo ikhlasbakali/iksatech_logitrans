@@ -1324,25 +1324,85 @@ export const appApi = {
       if (!user) {
         throw new Error("User not logged in");
       }
+      const token = user.token;
+      if (token) {
+        try {
+          const response = await fetch("/api/me", {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Accept": "application/json",
+            },
+          });
+
+          if (response.ok) {
+            const backendUser = await response.json();
+            const updatedUser = {
+              ...user,
+              id: backendUser.id,
+              full_name: backendUser.name,
+              email: backendUser.email,
+              user_role: backendUser.role || user.user_role,
+            };
+            writeAuthUser(updatedUser);
+            return updatedUser;
+          } else if (response.status === 401) {
+            writeAuthUser(null);
+            throw new Error("Session expirée");
+          }
+        } catch (error) {
+          console.error("Erreur de récupération du profil:", error);
+        }
+      }
       return user;
     },
     login: async (payload) => {
-      const users = readUsers();
-      const email = normalizeEmail(payload.email);
-      const user = users.find((item) => normalizeEmail(item.email) === email);
-      if (!user) {
-        throw new Error("User not found");
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          email: payload.email,
+          password: payload.password,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const message = errorData.message || (errorData.errors && Object.values(errorData.errors)[0]?.[0]) || "Identifiants incorrects.";
+        throw new Error(message);
       }
-      if (!payload.password || payload.password !== user.password) {
-        throw new Error("Invalid password");
-      }
-      if (user.is_active === false) {
-        throw new Error("Compte désactivé — contactez votre administrateur.");
-      }
-      writeAuthUser(user);
-      return user;
+
+      const data = await response.json();
+      const mappedUser = {
+        id: data.user.id,
+        full_name: data.user.name,
+        email: data.user.email,
+        user_role: data.role,
+        token: data.token,
+      };
+
+      writeAuthUser(mappedUser);
+      return mappedUser;
     },
     logout: async () => {
+      const user = readAuthUser();
+      const token = user?.token;
+      if (token) {
+        try {
+          await fetch("/api/logout", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Accept": "application/json",
+            },
+          });
+        } catch (error) {
+          console.error("Erreur lors de la déconnexion API:", error);
+        }
+      }
       writeAuthUser(null);
       return true;
     },
