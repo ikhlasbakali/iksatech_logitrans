@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Http\Requests\StoreClientRequest;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -12,9 +13,9 @@ class ClientController extends Controller
         return Client::with('salesQuotes')->get();
     }
 
-    public function store(Request $request)
+    public function store(StoreClientRequest $request)
     {
-        $client = Client::create($request->all());
+        $client = Client::create($request->validated());
         return response()->json($client, 201);
     }
 

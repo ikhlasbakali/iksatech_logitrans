@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Http\Requests\StoreMessageRequest;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
@@ -12,10 +13,10 @@ class MessageController extends Controller
         return Message::with('sender', 'receiver')->get();
     }
 
-    public function store(Request $request)
+    public function store(StoreMessageRequest $request)
     {
         $message = Message::create([
-            ...$request->all(),
+            ...$request->validated(),
             'sender_id' => $request->user()->id,
             'sent_at' => now(),
         ]);

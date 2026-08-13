@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SalesQuote;
+use App\Http\Requests\StoreSalesQuoteRequest;
 use Illuminate\Http\Request;
 
 class SalesQuoteController extends Controller
@@ -12,10 +13,10 @@ class SalesQuoteController extends Controller
         return SalesQuote::with('client', 'commercialOwner')->get();
     }
 
-    public function store(Request $request)
+    public function store(StoreSalesQuoteRequest $request)
     {
         $quote = SalesQuote::create([
-            ...$request->all(),
+            ...$request->validated(),
             'commercial_owner' => $request->user()->id,
         ]);
         return response()->json($quote, 201);
