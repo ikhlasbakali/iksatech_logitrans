@@ -4,30 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Http\Requests\StoreClientRequest;
+use App\Http\Resources\ClientResource;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
     public function index()
     {
-        return Client::with('salesQuotes')->get();
+        return ClientResource::collection(Client::with('salesQuotes')->get());
     }
 
     public function store(StoreClientRequest $request)
     {
         $client = Client::create($request->validated());
-        return response()->json($client, 201);
+        return new ClientResource($client);
     }
 
     public function show(Client $client)
     {
-        return $client->load('salesQuotes');
+        return new ClientResource($client->load('salesQuotes'));
     }
 
     public function update(Request $request, Client $client)
     {
         $client->update($request->all());
-        return response()->json($client);
+        return new ClientResource($client);
     }
 
     public function destroy(Client $client)

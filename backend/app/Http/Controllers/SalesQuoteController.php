@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\SalesQuote;
 use App\Http\Requests\StoreSalesQuoteRequest;
+use App\Http\Resources\SalesQuoteResource;
 use Illuminate\Http\Request;
 
 class SalesQuoteController extends Controller
 {
     public function index()
     {
-        return SalesQuote::with('client', 'commercialOwner')->get();
+        return SalesQuoteResource::collection(SalesQuote::with('client', 'commercialOwner')->get());
     }
 
     public function store(StoreSalesQuoteRequest $request)
@@ -19,18 +20,18 @@ class SalesQuoteController extends Controller
             ...$request->validated(),
             'commercial_owner' => $request->user()->id,
         ]);
-        return response()->json($quote, 201);
+        return new SalesQuoteResource($quote);
     }
 
     public function show(SalesQuote $salesQuote)
     {
-        return $salesQuote->load('client', 'commercialOwner');
+        return new SalesQuoteResource($salesQuote->load('client', 'commercialOwner'));
     }
 
     public function update(Request $request, SalesQuote $salesQuote)
     {
         $salesQuote->update($request->all());
-        return response()->json($salesQuote);
+        return new SalesQuoteResource($salesQuote);
     }
 
     public function destroy(SalesQuote $salesQuote)
