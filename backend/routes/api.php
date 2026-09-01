@@ -2,6 +2,7 @@
 // routes/api.php
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OperationController;
+use App\Http\Controllers\OperationEventController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\SalesQuoteController;
@@ -15,13 +16,14 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
-    Route::get('/operations', [OperationController::class, 'index']);
 
     Route::apiResource('clients', ClientController::class);
     Route::apiResource('sales-quotes', SalesQuoteController::class);
     Route::apiResource('messages', MessageController::class);
     Route::apiResource('drivers', DriverController::class);
     Route::apiResource('vehicles', VehicleController::class);
+    Route::apiResource('operations', OperationController::class);
+    Route::apiResource('operation-events', OperationEventController::class);
 
     Route::middleware('role:admin')->group(function () {
         Route::post('/users', [UserController::class, 'store']);
