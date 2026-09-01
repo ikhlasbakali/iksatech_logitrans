@@ -11,7 +11,7 @@ class MessageController extends Controller
 {
     public function index()
     {
-        return MessageResource::collection(Message::with('sender', 'receiver')->get());
+        return MessageResource::collection(Message::with('sender', 'receiver', 'operation')->get());
     }
 
     public function store(StoreMessageRequest $request)
@@ -21,23 +21,23 @@ class MessageController extends Controller
             'sender_id' => $request->user()->id,
             'sent_at' => now(),
         ]);
-        return new MessageResource($message);
+        return new MessageResource($message->load('operation'));
     }
 
     public function show(Message $message)
     {
-        return new MessageResource($message->load('sender', 'receiver'));
+        return new MessageResource($message->load('sender', 'receiver', 'operation'));
     }
 
     public function update(Request $request, Message $message)
     {
         $message->update($request->all());
-        return new MessageResource($message);
+        return new MessageResource($message->load('operation'));
     }
 
     public function destroy(Message $message)
     {
         $message->delete();
-        return response()->json(['message' => 'Message supprimé.']);
+        return response()->json(['message' => 'Message supprime.']);
     }
 }
