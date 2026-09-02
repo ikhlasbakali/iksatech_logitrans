@@ -42,7 +42,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('operations', [OperationController::class, 'store']);
         Route::put('operations/{operation}', [OperationController::class, 'update']);
         Route::patch('operations/{operation}', [OperationController::class, 'update']);
-        Route::delete('operations/{operation}', [OperationController::class, 'destroy']);
 
         Route::apiResource('operation-events', OperationEventController::class)->except(['index', 'show']);
         Route::apiResource('vehicles', VehicleController::class);
@@ -74,6 +73,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:' . RoleGroups::OPERATION_READERS)->group(function () {
         Route::get('operations', [OperationController::class, 'index']);
         Route::get('operations/{operation}', [OperationController::class, 'show']);
+        Route::delete('operations/{operation}', [OperationController::class, 'destroy']);
     });
 
     Route::middleware('role:driver')->group(function () {
