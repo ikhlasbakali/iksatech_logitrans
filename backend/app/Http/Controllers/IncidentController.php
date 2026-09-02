@@ -13,6 +13,8 @@ class IncidentController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Incident::class);
+
         $query = Incident::with(['operation', 'reportedBy', 'assignedTo']);
 
         if ($request->filled('operation_id')) {
@@ -36,6 +38,8 @@ class IncidentController extends Controller
 
     public function store(StoreIncidentRequest $request)
     {
+        $this->authorize('create', Incident::class);
+
         $data = $request->validated();
         $data['reported_by'] = $request->user()->id;
         $data['type'] = $data['type'] ?? 'other';
@@ -66,6 +70,8 @@ class IncidentController extends Controller
 
     public function show(Incident $incident)
     {
+        $this->authorize('view', $incident);
+
         return new IncidentResource(
             $incident->load(['operation', 'reportedBy', 'assignedTo'])
         );
@@ -73,6 +79,8 @@ class IncidentController extends Controller
 
     public function update(UpdateIncidentRequest $request, Incident $incident)
     {
+        $this->authorize('update', $incident);
+
         $data = $request->validated();
         $previousStatus = $incident->status;
 
@@ -112,6 +120,8 @@ class IncidentController extends Controller
 
     public function destroy(Incident $incident)
     {
+        $this->authorize('delete', $incident);
+
         $incident->delete();
 
         return response()->json(['message' => 'Incident supprime.']);

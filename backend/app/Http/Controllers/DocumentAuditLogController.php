@@ -12,6 +12,8 @@ class DocumentAuditLogController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('viewAny', DocumentAuditLog::class);
+
         $query = DocumentAuditLog::with(['document.operation', 'actor']);
 
         if ($request->filled('document_id')) {
@@ -27,6 +29,8 @@ class DocumentAuditLogController extends Controller
 
     public function store(StoreDocumentAuditLogRequest $request)
     {
+        $this->authorize('create', DocumentAuditLog::class);
+
         $log = DocumentAuditLog::create([
             ...$request->validated(),
             'actor_id' => $request->user()->id,
@@ -39,6 +43,8 @@ class DocumentAuditLogController extends Controller
 
     public function show(DocumentAuditLog $documentAuditLog)
     {
+        $this->authorize('view', $documentAuditLog);
+
         return new DocumentAuditLogResource(
             $documentAuditLog->load(['document.operation', 'actor'])
         );
@@ -46,6 +52,8 @@ class DocumentAuditLogController extends Controller
 
     public function update(UpdateDocumentAuditLogRequest $request, DocumentAuditLog $documentAuditLog)
     {
+        $this->authorize('update', $documentAuditLog);
+
         $documentAuditLog->update($request->validated());
 
         return new DocumentAuditLogResource(
@@ -55,6 +63,8 @@ class DocumentAuditLogController extends Controller
 
     public function destroy(DocumentAuditLog $documentAuditLog)
     {
+        $this->authorize('delete', $documentAuditLog);
+
         $documentAuditLog->delete();
 
         return response()->json(['message' => 'Journal d\'audit supprime.']);

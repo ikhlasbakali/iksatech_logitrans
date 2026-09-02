@@ -6,19 +6,25 @@ use App\Models\Operation;
 use App\Models\OperationEvent;
 use App\Http\Requests\StoreOperationRequest;
 use App\Http\Resources\OperationResource;
+use App\Support\AccessScope;
 use Illuminate\Http\Request;
 
 class OperationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return OperationResource::collection(
-            Operation::with('client', 'driver1', 'driver2', 'vehicle', 'assignedAgent')->get()
-        );
+        $this->authorize('viewAny', Operation::class);
+
+        $query = Operation::with('client', 'driver1', 'driver2', 'vehicle', 'assignedAgent');
+        AccessScope::scopeOperations($query, $request->user());
+
+        return OperationResource::collection($query->get());
     }
 
     public function store(StoreOperationRequest $request)
     {
+        $this->authorize('create', Operation::class);
+
         $operation = Operation::create($request->validated());
 
         OperationEvent::create([
@@ -33,6 +39,8 @@ class OperationController extends Controller
 
     public function show(Operation $operation)
     {
+        $this->authorize('view', $operation);
+
         return new OperationResource(
             $operation->load('client', 'driver1', 'driver2', 'vehicle', 'assignedAgent', 'events')
         );
@@ -40,6 +48,20 @@ class OperationController extends Controller
 
     public function update(Request $request, Operation $operation)
     {
+        $this->authorize('update', $operation);
+
+        if ($request->user()->hasRole('driver')) {
+            $operation->update($request->only([
+                'current_lat',
+                'current_lng',
+                'status',
+                'actual_pickup',
+                'actual_delivery',
+            ]));
+
+            return new OperationResource($operation);
+        }
+
         if ($request->has('status') && $request->status !== $operation->status) {
             if (!$operation->canTransitionTo($request->status)) {
                 return response()->json([
@@ -64,12 +86,16 @@ class OperationController extends Controller
         }
 
         $operation->update($request->all());
+
         return new OperationResource($operation);
     }
 
     public function destroy(Operation $operation)
     {
+        $this->authorize('delete', $operation);
+
         $operation->delete();
+
         return response()->json(['message' => 'Operation supprimee.']);
     }
 }

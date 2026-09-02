@@ -8,6 +8,7 @@ use App\Http\Resources\DocumentResource;
 use App\Models\Document;
 use App\Models\DocumentAuditLog;
 use App\Models\OperationEvent;
+use App\Support\AccessScope;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -18,7 +19,13 @@ class DocumentController extends Controller
 
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Document::class);
+
         $query = Document::with('operation', 'uploadedBy', 'validatedBy', 'rejectedBy');
+
+        if ($request->user()->hasRole('client')) {
+            AccessScope::scopeThroughOperation($query, $request->user());
+        }
 
         if ($request->filled('operation_id')) {
             $query->where('operation_id', $request->integer('operation_id'));
@@ -37,6 +44,8 @@ class DocumentController extends Controller
 
     public function store(StoreDocumentRequest $request)
     {
+        $this->authorize('create', Document::class);
+
         $file = $request->file('file');
         $operationId = $request->integer('operation_id');
         $storedPath = $this->storeUploadedFile($file, $operationId);
@@ -74,6 +83,8 @@ class DocumentController extends Controller
 
     public function show(Document $document)
     {
+        $this->authorize('view', $document);
+
         return new DocumentResource(
             $document->load('operation', 'uploadedBy', 'validatedBy', 'rejectedBy')
         );
@@ -81,6 +92,8 @@ class DocumentController extends Controller
 
     public function update(UpdateDocumentRequest $request, Document $document)
     {
+        $this->authorize('update', $document);
+
         $data = $request->validated();
 
         if ($request->hasFile('file')) {
@@ -126,6 +139,8 @@ class DocumentController extends Controller
 
     public function destroy(Document $document)
     {
+        $this->authorize('delete', $document);
+
         $this->deleteStoredFile($document->file_path);
         $document->delete();
 

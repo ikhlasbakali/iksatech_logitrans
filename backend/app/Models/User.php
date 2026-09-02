@@ -58,4 +58,14 @@ class User extends Authenticatable
             'is_active' => 'boolean',
         ];
     }
+
+    public function clientProfile()
+    {
+        return $this->hasOne(Client::class);
+    }
+
+    public function driverProfile()
+    {
+        return $this->hasOne(Driver::class);
+    }
 }
