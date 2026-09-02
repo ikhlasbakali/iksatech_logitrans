@@ -12,6 +12,7 @@ class MessageResource extends JsonResource
         return [
             'id' => $this->id,
             'operation_id' => $this->operation_id,
+            'operation' => new OperationResource($this->whenLoaded('operation')),
             'sender_id' => $this->sender_id,
             'sender' => new UserResource($this->whenLoaded('sender')),
             'sender_role_label' => $this->sender_role_label,
